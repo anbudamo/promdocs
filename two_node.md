@@ -1,6 +1,6 @@
 **node0:**
 
-Create the config file: sudo nano /etc/prometheus/prometheus.yml
+1. Create the config file: sudo nano /etc/prometheus/prometheus.yml
 
 Add the following to prometheus.yml:
 
