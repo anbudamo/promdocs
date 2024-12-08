@@ -1,21 +1,16 @@
+Follow these instructions to setup both the nodes.
 **node0:**
 
-1. Create the config file: sudo nano /etc/prometheus/prometheus.yml
+1. Install Prometheus:
+sudo apt update && upgrade
+sudo apt install prometheus
 
-Add the following to prometheus.yml:
+2. Create the config file: sudo nano /etc/prometheus/prometheus.yml
 
-global:
-  - scrape_interval: 15s
-  - evaluation_interval: 15s
+3. Add the master.yml code in promdocs repo to prometheus.yml:
+can also refer to: https://stackoverflow.com/questions/70094753/prometheus-monitoring-for-remote-network 
 
-scrape_configs:
-  - job_name: 'prometheus'
-    static_configs:
-      - targets: ['localhost:9090']
-
-refer to: https://stackoverflow.com/questions/70094753/prometheus-monitoring-for-remote-network 
-
-Create the following script.sh to add the necessary flags on startup:
+4. Create the following script.sh to add the necessary flags on startup:
 /usr/local/bin/prometheus \
  --config.file /etc/prometheus/prometheus.yml \
  --storage.tsdb.path /var/lib/prometheus/ \
@@ -23,25 +18,41 @@ Create the following script.sh to add the necessary flags on startup:
  --web.console.libraries=/etc/prometheus/console_libraries \
  --web.enable-remote-write-receiver
 
-Start Prometheus: sudo bash script.sh 
+5. Start Prometheus: sudo bash script.sh 
 
 **node1:**
 
-Create the config file: sudo nano /etc/prometheus/prometheus.yml
+1. Install Prometheus:
+sudo apt update && upgrade
+sudo apt install prometheus
 
-Add the following to prometheus.yml:
+2. Create the config file: sudo nano /etc/prometheus/prometheus.yml
 
-global:
-  - scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
-  - evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+3. Add the job.yml code in promdocs repo to prometheus.yml:
 
-remote_write:
-  - url: http://10.10.1.1:9090/api/v1/write
+4. Download the c-api client:
+curl -L -o prometheus-client-c-v0.1.3.tar.gz https://github.com/digitalocean/prometheus-client-c/archive/refs/tags/v0.1.3.tar.gz
+tar -xzf prometheus-client-c-v0.1.3.tar.gz
+cd prometheus-client-c-0.1.3
+sudo apt install cmake
+- cd to prom
+  mkdir build
+  cmake --install-prefix=/usr/local ..
+  sudo make install
+  export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+- cd to promhttp
+  sudo apt-get install libmicrohttpd-dev
+  mkdir build
+  cmake --install-prefix=/usr/local .
+  sudo make install
+  * you will get this error "note: expected ‘MHD_AccessHandlerCallback’ "
+  open the CMakeLists.txt in promhttp and remove the -werror flag in all the 'target_compile_options'
+  sudo make install
 
-scrape_configs:
-  - job_name: local1
-    scrape_interval: 5s
-    static_configs:
-      - targets: ['localhost:8000']
+5. cd back to your root directory, create new driver file called main.c, and copy the promdocs/main.c code to it
 
-Start Prometheus: sudo systemctl prometheus start
+6. Start Prometheus:
+sudo systemctl prometheus enable 
+sudo systemctl prometheus start
+
+7. 
