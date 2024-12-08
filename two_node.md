@@ -12,6 +12,7 @@ sudo apt install prometheus
 can also refer to: https://stackoverflow.com/questions/70094753/prometheus-monitoring-for-remote-network 
 
 4. Create the following script.sh to add the necessary flags on startup:
+
 /usr/local/bin/prometheus \
  --config.file /etc/prometheus/prometheus.yml \
  --storage.tsdb.path /var/lib/prometheus/ \
