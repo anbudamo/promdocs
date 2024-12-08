@@ -1,4 +1,5 @@
 Follow these instructions to setup both the nodes.
+
 **node0:**
 
 1. Install Prometheus:
