@@ -45,7 +45,7 @@ can also refer to: https://stackoverflow.com/questions/70094753/prometheus-monit
 - cd to promhttp
   - sudo apt-get install libmicrohttpd-dev
   - mkdir build
-  - cmake --install-prefix=/usr/local .
+  - cmake --install-prefix=/usr/local ..
   - sudo make install
   - * you will get this error "note: expected ‘MHD_AccessHandlerCallback’ "
   - open the CMakeLists.txt in promhttp and remove the -werror flag in all the 'target_compile_options'
