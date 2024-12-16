@@ -39,12 +39,15 @@ int main(int argc, const char **argv) {
     parse_file(filename, m, header_list, n, data_array);
     output_file(m, header_list); // to print the contents of header_list
 
-    // use do_increment to initialize and store metrics
-    const char *labels[] = { "branch-instructions", "cache-misses" }; // initialize const char **labels to pass to do function
+    // printf("%f/%f", data_array[202][0], data_array[202][1]);
+    // printf("%f/%f", data_array[203][0], data_array[203][1]);
+    // printf("%f/%f", data_array[205][0], data_array[205][1]);
+
+    // use do_increment to initialize and store the metrics
     for (int i = 0; i < 400; i++) { // change 400 to a variable that tracks number of lines in file during parsing
         // converting error rate and injection rate to a string
         char rate_pair[256];
-        snprintf(rate_pair, sizeof(rate_pair), "%f/%f", round(data_array[i][0] * 100 / 100), round(data_array[i][1] * 100 / 100));
+        snprintf(rate_pair, sizeof(rate_pair), "%.2f/%.2f", data_array[i][0], data_array[i][1]);
 
         for (int j = 2; j < n; j++) {
             do_increment_counters(rate_pair, header_list[j], data_array[i][j]);
