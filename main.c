@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <math.h>
+#include <time.h>
 
 #include <prom.h>
 #include <promhttp.h> // include for HTTP server functionalities
@@ -44,15 +45,24 @@ int main(int argc, const char **argv) {
     // printf("%f/%f", data_array[205][0], data_array[205][1]);
 
     // use do_increment to initialize and store the metrics
+    clock_t start, end;
+    double time_taken_total = 0;
     for (int i = 0; i < 400; i++) { // change 400 to a variable that tracks number of lines in file during parsing
         // converting error rate and injection rate to a string
         char rate_pair[256];
         snprintf(rate_pair, sizeof(rate_pair), "%.2f/%.2f", data_array[i][0], data_array[i][1]);
 
         for (int j = 2; j < n; j++) {
+            start = clock();
             do_increment_counters(rate_pair, header_list[j], data_array[i][j]);
+            end = clock();
+            time_taken_total += ((double) (end - start) / CLOCKS_PER_SEC);
         }
     }
+
+    // print time taken for do_increment
+    double time_taken_avg = time_taken_total / (NO_OF_COUNTERS * 400);
+    printf("time taken for do_increment_counters call: %f\n", time_taken_avg);
 
     // Start the HTTP server
     struct MHD_Daemon* promtest_daemon = promhttp_start_daemon(MHD_USE_DEBUG|MHD_USE_SELECT_INTERNALLY, 8000, NULL, NULL);
