@@ -28,8 +28,6 @@ int do_increment_counters(const char* rate_pair, const char* counter_name, doubl
     printf("my_counter: %p\n", (void*)my_counter);
     printf("Label: %s %s\n", rate_pair, counter_name);
 
-
-
     s = prom_counter_add(my_counter, counter_value, (const char*[]) { rate_pair, counter_name });
     return s;
 }
