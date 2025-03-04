@@ -14,4 +14,4 @@ parse: parse.c
 	$(CC) $< -o $@
 
 clean:
-	rm -f $(BIN) $(OBJECTS)
+	rm -rf $(BIN) $(OBJECTS)
