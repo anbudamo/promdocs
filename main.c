@@ -79,3 +79,4 @@ int main(int argc, const char **argv) {
     MHD_stop_daemon(promtest_daemon);
 
     return 0;
+}
