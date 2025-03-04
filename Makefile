@@ -1,9 +1,17 @@
 CC=gcc
-LFLAGS=-lprom -lpromhttp -lmicrohttpd
+LFLAGS=-lprom -lpromhttp -lmicrohttpd -lm
 BIN=main
+OBJECTS=main.o parse.o metric.o
+HEADERS=parse.h metric.h
 
-main:
-	$(CC) main.c -o $(BIN) $(LFLAGS)
+$(BIN): $(OBJECTS)
+	$(CC) $(OBJECTS) -o $(BIN) $(LFLAGS)
+
+%.o: %.c %.h
+	$(CC) -c $< -o $@ 
+
+parse: parse.c
+	$(CC) $< -o $@
 
 clean:
-	rm $(BIN)
+	rm -f $(BIN) $(OBJECTS)
